@@ -1,0 +1,49 @@
+/* Reset the margin and padding of the body */
+body {
+    margin: 0;
+    padding: 0;
+    padding-top: 70px; /* Adjusted to match the new height of your navbar */
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 30px; /* Slightly increased padding for a larger look */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    font-size: 1.1em; /* Slightly increased font size */
+}
+
+.navbar-left {
+    display: flex;
+}
+
+.navbar-right {
+    display: flex;
+    margin-left: auto;
+    padding-right: 30px; /* Reduced padding-right to balance the overall look */
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px; /* Increased margin for more spacing between links */
+    padding: 8px 12px; /* Added padding for a more button-like appearance */
+    border-radius: 4px; /* Slightly rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navbar-link:hover {
+    background-color: #555; /* Background color change on hover */
+    color: #fff; /* Maintain white color on hover */
+}
+
+/* Adjust the padding-top of the body to avoid content being hidden behind the navbar */
+body {
+    padding-top: 70px; /* Adjusted to match the new height of your navbar */
+}

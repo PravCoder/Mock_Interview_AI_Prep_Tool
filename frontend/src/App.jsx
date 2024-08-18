@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
 import Foo from "./pages/Foo";
 
 function Logout() {
@@ -21,19 +22,23 @@ function App() {
 
   return (
     <BrowserRouter>
+    <Navbar />
       <Routes>
 
         {/* home-route is protected so you need valid access token to view home-component */} 
         <Route path="/" element={<ProtectedRoute> <Home /> </ProtectedRoute>}/>
+
         {/* login-route is not protected because you can visit it any time */} 
         <Route path="/login" element={<Login />}/>
 
         <Route path="/logout" element={<Logout />}/>
 
         <Route path="/register" element={<RegisterAndLogout />}/>
+
         {/* render 404-page anytime any other path is visited */} 
         <Route path="*" element={<NotFound />}/>
 
+        {/* TESTING PURPOSES ONLY BELOW*/} 
         <Route path="/foo" element={<Foo />}/>
 
       </Routes>
