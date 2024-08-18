@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Note
+from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -22,11 +22,4 @@ class UserSerializer(serializers.ModelSerializer):
         new_user.save()
         print("\nDOES THIS EVERY GET PRINTED"+str(new_user))
         return new_user
-    
-    
-class NoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Note
-        fields = ["id", "title", "content", "created_at", "author"]
-        extra_kwargs = {"author": {"read_only": True}}
     
