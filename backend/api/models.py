@@ -13,8 +13,14 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]  # No username required
+
+    jobs = models.ManyToManyField("Job", related_name="jobs", blank=True)
     
 
+class Job(models.Model):
+    title = models.CharField(max_length=50, null=True)  # name of job SWE, ML intern, Senior Engineer. 
+    interviews = models.ManyToManyField("Interview", related_name="interviews", blank=True)
 
-
+class Interview(models.Model):
+   company = models.CharField(max_length=50, null=True) 
 

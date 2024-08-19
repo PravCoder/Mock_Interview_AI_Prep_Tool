@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import CreateInterviewPage from "./pages/CreateInterviewPage";
 import Foo from "./pages/Foo";
 
 function Logout() {
@@ -37,6 +38,9 @@ function App() {
 
         {/* render 404-page anytime any other path is visited */} 
         <Route path="*" element={<NotFound />}/>
+
+        {/* render 404-page anytime any other path is visited */} 
+        <Route path="/create-interview" element={<CreateInterviewPage />}/>
 
         {/* TESTING PURPOSES ONLY BELOW*/} 
         <Route path="/foo" element={<Foo />}/>

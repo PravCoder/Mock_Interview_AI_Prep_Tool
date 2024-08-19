@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
 
+    path("create-job/", views.create_job, name="create_job"),
 
     # TESTING PURPOSES ONLY BELOW
     path("get-foo/", views.get_foo, name="get-foo"),
