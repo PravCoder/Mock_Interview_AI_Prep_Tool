@@ -20,7 +20,8 @@ class User(AbstractUser):
 class Job(models.Model):
     title = models.CharField(max_length=50, null=True)  # name of job SWE, ML intern, Senior Engineer. 
     interviews = models.ManyToManyField("Interview", related_name="interviews", blank=True)
-
+    # add new fields to serializer 
+    
 class Interview(models.Model):
    company = models.CharField(max_length=50, null=True) 
 

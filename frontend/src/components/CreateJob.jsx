@@ -34,7 +34,7 @@ function CreateJob() {
         <div className="create-job-container">
             <h1>Create New Job</h1>
             <div className="form-group">
-                <label htmlFor="job-select">Select Job Title:</label>
+                <label htmlFor="job-select">Select Job Title or Create Custom Job:</label>
                 <input
                     list="job-titles"
                     id="job-select"

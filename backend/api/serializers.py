@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Job, Interview
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -22,4 +22,8 @@ class UserSerializer(serializers.ModelSerializer):
         new_user.save()
         print("\nDOES THIS EVERY GET PRINTED"+str(new_user))
         return new_user
-    
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ['id', "title"] 

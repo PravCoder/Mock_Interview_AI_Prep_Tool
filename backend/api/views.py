@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import UserSerializer
+from .serializers import UserSerializer, JobSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import User 
+from .models import User, Job, Interview
 from rest_framework.response import Response
 
 
@@ -14,9 +14,43 @@ class CreateUserView(generics.CreateAPIView):
 
 @api_view(["POST"])
 def create_job(request):
-    print(request.data)
-    return Response({"m":"helllooo"})
+    print(f"Create Job: {request.data}")
 
+    user = request.user
+    job_title = request.data["selectedJob"]
+    jobs_exists = False
+    for job in list(user.jobs.all()):
+        if job.title.lower() == job_title.lower():
+            jobs_exists = True
+
+    if jobs_exists == False:
+        new_job = Job(title=job_title)
+        new_job.save()
+        user.jobs.add(new_job)
+        user.save() 
+
+        return Response({"message":"success"})
+    else:
+        return Response({"message":"failure"})
+
+@api_view(["POST"])
+def delete_job(request, pk):
+    user = request.user
+    print(pk)
+    job_to_delete = Job.objects.get(id=int(pk))
+    job_to_delete.delete()
+
+    return Response({"message":"job sucessfully deleted"})
+
+@api_view(["GET"])
+def get_jobs(request):
+    user = request.user
+    serialized_jobs = []
+    for job in list(user.jobs.all()):
+        job_serializer = JobSerializer(job)
+        serialized_jobs.append(job_serializer.data)
+
+    return Response({"jobs":serialized_jobs})
 
 
 # TESTING PURPOSES ONLY BELOW

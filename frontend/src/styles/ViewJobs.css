@@ -1,0 +1,79 @@
+/* ViewJobs.css */
+.view-jobs-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.job-card {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.job-link {
+    text-decoration: none;
+    color: #333;
+}
+
+.job-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.job-options {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.options-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #666;
+}
+
+.options-dropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: #ff4d4f;
+    border: 1px solid #ff7875;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown-option {
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background-color: #ff4d4f;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.dropdown-option:hover {
+    background-color: #ff7875;
+}
