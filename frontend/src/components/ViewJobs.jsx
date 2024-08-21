@@ -41,7 +41,7 @@ function ViewJobs() {
             <div className="jobs-grid">
                 {jobs.map((job, index) => (
                     <div className="job-card" key={index}>
-                        <Link to={`/job/${job.id}`} className="job-link">
+                        <Link to={`/view-job/${job.id}`} className="job-link">
                             <h2 className="job-title">{job.title}</h2>
                             {/* Space for other details */}
                         </Link>
