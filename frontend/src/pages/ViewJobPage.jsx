@@ -1,19 +1,30 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import "../styles/ViewJobPage.css";
 import api from "../api";
-
+import { FaPlus } from 'react-icons/fa';
 
 function ViewJobPage() {
-    const { id } = useParams();  
+    const { id } = useParams();
+    const navigate = useNavigate();
 
+    // list all interview within this job
 
-    // create interview button
-    // list all interviews for this job
-
+    const handleCreateInterview = () => {
+        navigate(`/create-interview/${id}`);
+    };
 
     return (
-      <h1>View job: {id}</h1>
+      <div className="view-job-page-container">
+          <h1 className="view-job-title">View Job: {id}</h1>
+          
+          <button className="create-interview-button" onClick={handleCreateInterview}>
+              <FaPlus className="plus-icon" /> Create Interview
+          </button>
+
+          {/* List of interviews for this job can be added here */}
+      </div>
     );
-  }
-  
-  export default ViewJobPage;
+}
+
+export default ViewJobPage;

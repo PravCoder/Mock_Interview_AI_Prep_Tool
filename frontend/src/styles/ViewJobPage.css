@@ -1,0 +1,39 @@
+/* Container styling for the job page for create interview button only */
+.view-job-page-container {
+    padding: 20px;
+}
+
+/* Job title styling */
+.view-job-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Button styling */
+.create-interview-button {
+    background-color: #4c5156;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+
+    margin-left: 200px;
+
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the icon and text */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Add transition for hover effects */
+}
+
+/* Plus icon styling */
+.plus-icon {
+    font-size: 14px;
+}
+
+/* Button hover effect */
+.create-interview-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.07); /* Slight scaling effect on hover */
+}
