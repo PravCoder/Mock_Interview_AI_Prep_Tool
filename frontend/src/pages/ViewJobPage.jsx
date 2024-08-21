@@ -6,9 +6,21 @@ import { FaPlus } from 'react-icons/fa';
 
 function ViewJobPage() {
     const { id } = useParams();
+    const [job, setJob] = useState([]);
     const navigate = useNavigate();
 
-    // list all interview within this job
+    // list all interview within this job'
+
+    useEffect(() => {
+      api.get(`/api/get-job-one/${id}/`)
+          .then(response => {
+              setJob(response.data.job);
+              console.log(response.data)
+          })
+          .catch(error => {
+              console.log(error);
+          });
+    }, []);
 
     const handleCreateInterview = () => {
         navigate(`/create-interview/${id}`);
@@ -16,7 +28,7 @@ function ViewJobPage() {
 
     return (
       <div className="view-job-page-container">
-          <h1 className="view-job-title">View Job: {id}</h1>
+          <h1 className="view-job-title">{job.title} Interviews</h1>
           
           <button className="create-interview-button" onClick={handleCreateInterview}>
               <FaPlus className="plus-icon" /> Create Interview

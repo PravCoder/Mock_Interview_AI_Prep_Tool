@@ -52,6 +52,12 @@ def get_jobs(request):
 
     return Response({"jobs":serialized_jobs})
 
+@api_view(["GET"])
+def get_job_one(request, pk):
+    job = Job.objects.get(id=int(pk))
+    job_serializer = JobSerializer(job)
+    return Response({"job":job_serializer.data})
+
 
 # TESTING PURPOSES ONLY BELOW
 foo_db = ["foo1","foo1","foo1","foo1","foo1" ]
