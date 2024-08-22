@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/ViewJobs.css";
 import api from "../api";
-
+// this is for home page
 function ViewJobs() {
     const [jobs, setJobs] = useState([]);
     const [activeDropdown, setActiveDropdown] = useState(null);

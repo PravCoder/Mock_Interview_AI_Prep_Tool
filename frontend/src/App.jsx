@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import CreateInterviewPage from "./pages/CreateInterviewPage";
 import Foo from "./pages/Foo";
 import ViewJobPage from "./pages/ViewJobPage";
+import ViewInterviewPage from "./pages/ViewInterviewPage";
 
 function Logout() {
   localStorage.clear(); // when we logout we clear our refresh/access tokens
@@ -40,9 +41,11 @@ function App() {
         {/* render 404-page anytime any other path is visited */} 
         <Route path="*" element={<NotFound />}/>
 
-        <Route path="/create-interview" element={<CreateInterviewPage />}/>
+        <Route path="/create-interview/:id" element={<CreateInterviewPage />}/>
 
         <Route path="/view-job/:id" element={<ViewJobPage />}/>
+
+        <Route path="/view-interview/:id" element={<ViewInterviewPage />}/>
 
         {/* TESTING PURPOSES ONLY BELOW*/} 
         <Route path="/foo" element={<Foo />}/>

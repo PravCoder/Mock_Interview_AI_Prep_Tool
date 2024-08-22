@@ -34,6 +34,6 @@
 
 /* Button hover effect */
 .create-interview-button:hover {
-    background-color: #0056b3;
+    background-color: #deb026;
     transform: scale(1.07); /* Slight scaling effect on hover */
 }
