@@ -14,6 +14,6 @@
 }
 
 .progress-step.active {
-    border-color: #4caf50; /* Green color for the active step */
+    border-color: #2c2ab1; /* Green color for the active step */
     font-weight: bold;
 }

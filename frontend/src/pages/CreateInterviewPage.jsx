@@ -11,13 +11,17 @@ function CreateInterview() {
         setStep(step + 1);
     };
 
+    const handleBack = () => {
+        setStep(step - 1);
+    };
+
     return (
         <div>
             <ProgressBar step={step} />
             <div className="form-section">
                 {step === 0 && <JobInfo onNext={handleNext} />}
-                {step === 1 && <CompanyInfo onNext={handleNext} />}
-                {step === 2 && <DocumentInfo />}
+                {step === 1 && <CompanyInfo onNext={handleNext} onBack={handleBack} />}
+                {step === 2 && <DocumentInfo onBack={handleBack}  />}
             </div>
         </div>
     );

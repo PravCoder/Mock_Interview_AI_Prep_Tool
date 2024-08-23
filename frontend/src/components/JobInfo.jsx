@@ -6,6 +6,7 @@ function JobInfo({ onNext }) {
             <h2>Job Information</h2>
             {/* Add your form fields here */}
             <button onClick={onNext}>Next</button>
+
         </div>
     );
 }
