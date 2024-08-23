@@ -59,6 +59,17 @@ def get_job_one(request, pk):
     return Response({"job":job_serializer.data})
 
 
+@api_view(["POST"])
+def create_interview(request, pk):
+    user = request.user
+
+    job = Job.objects.get(id=int(pk))
+
+
+    print(f"REQUEST DATA: {request.data}")
+    return Response({"message":"succesfully created interview"})
+
+
 # TESTING PURPOSES ONLY BELOW
 foo_db = ["foo1","foo1","foo1","foo1","foo1" ]
 @api_view(["GET"]) # his view function will respond to HTTP GET requests. When a GET request is made to the corresponding URL (e.g., /api/hello-world/), this function will be invoked

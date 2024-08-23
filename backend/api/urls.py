@@ -8,6 +8,9 @@ urlpatterns = [
     path("delete-job/<str:pk>/", views.delete_job, name="delete_job"),
     path("get-job-one/<str:pk>/", views.get_job_one, name="get_job_one"),
 
+    path("create-interview/<str:pk>/", views.create_interview, name="create_interview"),
+
+
     # TESTING PURPOSES ONLY BELOW
     path("get-foo/", views.get_foo, name="get-foo"),
     path("create-foo/", views.create_foo, name="create-foo"),
