@@ -1,11 +1,26 @@
-import {useState} from "react";
-import api from "../api";
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import ProgressBar from '../components/ProgressBar';
+import JobInfo from '../components/JobInfo';
+import CompanyInfo from '../components/CompanyInfo';
+import DocumentInfo from '../components/DocumentInfo';
 
-function CreateInterviewPage() {
+function CreateInterview() {
+    const [step, setStep] = useState(0);
+
+    const handleNext = () => {
+        setStep(step + 1);
+    };
+
     return (
-        <h1>Create Interview page</h1>
+        <div>
+            <ProgressBar step={step} />
+            <div className="form-section">
+                {step === 0 && <JobInfo onNext={handleNext} />}
+                {step === 1 && <CompanyInfo onNext={handleNext} />}
+                {step === 2 && <DocumentInfo />}
+            </div>
+        </div>
     );
 }
 
-export default CreateInterviewPage;
+export default CreateInterview;

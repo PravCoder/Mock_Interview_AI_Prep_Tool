@@ -23,5 +23,13 @@ class Job(models.Model):
     # add new fields to serializer 
     
 class Interview(models.Model):
-   company = models.CharField(max_length=50, null=True) 
+   job_title = models.CharField(max_length=50, null=True) 
+   job_description = models.CharField(max_length=10000, null=True) 
+   
+   company_name= models.CharField(max_length=50, null=True) 
+   company_description = models.CharField(max_length=10000, null=True) 
+
+   # documents = 
+
+
 
