@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import UserSerializer, JobSerializer
+from .serializers import UserSerializer, JobSerializer, InterviewSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import User, Job, Interview
@@ -60,14 +60,37 @@ def get_job_one(request, pk):
 
 
 @api_view(["POST"])
-def create_interview(request, pk):
-    user = request.user
+def create_interview(request, pk):  # id of job specific to user
+    user = request.user 
 
-    job = Job.objects.get(id=int(pk))
+    job = Job.objects.get(id=int(pk)) # get the type of job-category this interview is in
 
+    job_title = request.data["job_title"]
+    job_description = request.data["job_description"]
+    company_name = request.data["company_name"]
+    company_description = request.data["company_description"]
+
+    new_interview = Interview.objects.create(job_title=job_title, job_description=job_description, company_name=company_name, company_description=company_description)
+    new_interview.save()
+    job.interviews.add(new_interview)
+    job.save()
 
     print(f"REQUEST DATA: {request.data}")
     return Response({"message":"succesfully created interview"})
+
+
+@api_view(["GET"])
+def get_interviews_in_job(request, pk):    
+    user = request.user
+    job = Job.objects.get(id=int(pk))
+    job_serializer = JobSerializer(job)
+
+    serialized_interviews = []
+    for interview in list(job.interviews.all()):
+        interview_serializer = InterviewSerializer(job)
+        serialized_interviews.append(job_serializer.data)
+
+    return Response({"job":job_serializer.data, "interviews":serialized_interviews})
 
 
 # TESTING PURPOSES ONLY BELOW

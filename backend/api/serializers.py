@@ -27,3 +27,8 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', "title"] 
+
+class InterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ['id', "job_title", "job_description", "company_name", "company_description"] 

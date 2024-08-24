@@ -1,21 +1,24 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import "../styles/ViewJobPage.css";
+import InterviewsList from '../components/InterviewsList';
 import api from "../api";
 import { FaPlus } from 'react-icons/fa';
 
 function ViewJobPage() {
     const { id } = useParams();
-    const [job, setJob] = useState([]);
     const navigate = useNavigate();
+
+    const [job, setJob] = useState([]);
+    const [crossProducts, setCrossProducts] = useState([]);
 
     // list all interview within this job'
 
     useEffect(() => {
-      api.get(`/api/get-job-one/${id}/`)
+      api.get(`/api/get-interviews-in-job/${id}/`)
           .then(response => {
               setJob(response.data.job);
-              console.log(response.data)
+              console.log("RESPONSE DATA: ", response.data);
           })
           .catch(error => {
               console.log(error);
@@ -34,7 +37,6 @@ function ViewJobPage() {
               <FaPlus className="plus-icon" /> Create Interview
           </button>
 
-          {/* List of interviews for this job can be added here */}
       </div>
     );
 }

@@ -46,7 +46,7 @@ function CreateInterview() {
                 job_description:jobDescription,
 
                 company_name: comapnyName,
-                comapny_description: companyDescription,
+                company_description: companyDescription,
             
             });  // pass in form data
             console.log(response.data);
