@@ -87,8 +87,8 @@ def get_interviews_in_job(request, pk):
 
     serialized_interviews = []
     for interview in list(job.interviews.all()):
-        interview_serializer = InterviewSerializer(job)
-        serialized_interviews.append(job_serializer.data)
+        interview_serializer = InterviewSerializer(interview)
+        serialized_interviews.append(interview_serializer.data)
 
     return Response({"job":job_serializer.data, "interviews":serialized_interviews})
 

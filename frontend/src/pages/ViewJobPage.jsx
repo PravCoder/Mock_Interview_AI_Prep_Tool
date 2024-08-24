@@ -10,7 +10,7 @@ function ViewJobPage() {
     const navigate = useNavigate();
 
     const [job, setJob] = useState([]);
-    const [crossProducts, setCrossProducts] = useState([]);
+    const [interviews, setInterviews] = useState([]);
 
     // list all interview within this job'
 
@@ -18,6 +18,7 @@ function ViewJobPage() {
       api.get(`/api/get-interviews-in-job/${id}/`)
           .then(response => {
               setJob(response.data.job);
+              setInterviews(response.data.interviews);
               console.log("RESPONSE DATA: ", response.data);
           })
           .catch(error => {
@@ -36,6 +37,8 @@ function ViewJobPage() {
           <button className="create-interview-button" onClick={handleCreateInterview}>
               <FaPlus className="plus-icon" /> Create Interview
           </button>
+
+          <InterviewsList interviews={interviews} />
 
       </div>
     );

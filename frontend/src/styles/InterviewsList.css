@@ -1,0 +1,36 @@
+/* InterviewsList.css */
+
+/* Container for the list of interview cards */
+.interviews-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Individual interview card styling */
+.interview-card {
+    background-color: #817f7f;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Set a maximum width */
+    width: 100%; /* Ensure it doesn't exceed the max-width */
+    margin-left: 20px; /* Add some left margin to space it from the edge */
+}
+
+/* Interview title styling */
+.interview-title {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Interview date and notes styling */
+.interview-date,
+.interview-notes {
+    font-size: 1rem;
+    margin: 4px 0;
+    color: #555;
+}

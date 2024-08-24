@@ -1,10 +1,18 @@
 import React, {useState} from 'react';
+import "../styles/InterviewsList.css";
 
-function InterviewsList() {
-    
 
+function InterviewsList({ interviews }) {
     return (
-        <h1>asd</h1>
+        <div className="interviews-list">
+            {interviews.map((interview, index) => (
+                <div key={index} className="interview-card">
+                    <h3 className="interview-title">{interview.company_name}</h3>
+
+                    {/* Add more details as needed */}
+                </div>
+            ))}
+        </div>
     );
 }
 

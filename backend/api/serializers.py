@@ -30,5 +30,5 @@ class JobSerializer(serializers.ModelSerializer):
 
 class InterviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Job
+        model = Interview
         fields = ['id', "job_title", "job_description", "company_name", "company_description"] 
