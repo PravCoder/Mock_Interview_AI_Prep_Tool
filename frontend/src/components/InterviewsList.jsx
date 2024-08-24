@@ -1,16 +1,26 @@
 import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 import "../styles/InterviewsList.css";
 
 
 function InterviewsList({ interviews }) {
     return (
-        <div className="interviews-list">
+        <div className="interviews-list-container">
             {interviews.map((interview, index) => (
-                <div key={index} className="interview-card">
-                    <h3 className="interview-title">{interview.company_name}</h3>
+                <Link to={`/view-interview/${interview.id}`} key={interview.id} className="interview-card-link">
+                    <div key={index} className="interview-card">
 
-                    {/* Add more details as needed */}
-                </div>
+                        <div className="interview-card-title">
+                            {interview.job_title} @ {interview.company_name}
+                        </div>
+
+                        <div className="interview-card-company">
+                            {interview.company_name}
+                        </div>
+
+                    </div>
+                </Link>
+                
             ))}
         </div>
     );
