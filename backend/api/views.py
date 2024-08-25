@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import User, Job, Interview
 from rest_framework.response import Response
+from django.http import HttpResponse
+
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -69,13 +71,22 @@ def create_interview(request, pk):  # id of job specific to user
     job_description = request.data["job_description"]
     company_name = request.data["company_name"]
     company_description = request.data["company_description"]
+    resume = request.FILES.get("resume")
+    print(f"REQUEST DATA: {request.data}")
+    print(f"Resume: {resume}")
 
-    new_interview = Interview.objects.create(job_title=job_title, job_description=job_description, company_name=company_name, company_description=company_description)
+    resume = request.FILES.get("resume")
+
+    file_data = resume.read()  # Read the contents of the file
+    file_text = file_data.decode('utf-8')  # Convert bytes to string (if it's a text file)
+    print(file_text)
+
+    new_interview = Interview.objects.create(job_title=job_title, job_description=job_description, company_name=company_name, company_description=company_description, resume_text=file_text)
     new_interview.save()
     job.interviews.add(new_interview)
     job.save()
 
-    print(f"REQUEST DATA: {request.data}")
+    
     return Response({"message":"succesfully created interview"})
 
 

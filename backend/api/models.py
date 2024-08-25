@@ -29,6 +29,8 @@ class Interview(models.Model):
    company_name= models.CharField(max_length=50, null=True) 
    company_description = models.CharField(max_length=10000, null=True) 
 
+   resume_text = models.CharField(max_length=10000, null=True) 
+
    # documents = 
 
 

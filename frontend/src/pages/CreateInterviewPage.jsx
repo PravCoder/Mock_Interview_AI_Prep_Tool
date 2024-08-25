@@ -15,8 +15,10 @@ function CreateInterview() {
     const [jobTitle, setJobTitle] = useState("none");
     const [jobDescription, setDescription] = useState("none");
 
-    const [comapnyName, setCompanyName] = useState("none");
-    const [companyDescription, setComapnyDescription] = useState("none");
+    const [companyName, setCompanyName] = useState("none");
+    const [companyDescription, setCompanyDescription] = useState("none");
+
+    const [resume, setResume] = useState("none");
 
 
     const handleNext = (newData) => {
@@ -26,9 +28,9 @@ function CreateInterview() {
             setDescription(newData.jobDescription);
         } else if (step === 1) {
             setCompanyName(newData.companyName);  // from all the job-form data get the title
-            setComapnyDescription(newData.companyDescription);
+            setCompanyDescription(newData.companyDescription);
         } else if (step === 2) {
-            // setFormData(prev => ({ ...prev, documentData: newData }));
+            setResume(newData.resume);
         }
         setStep(step + 1);
     };
@@ -38,17 +40,24 @@ function CreateInterview() {
     };
 
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        const formData = new FormData(); // stores all data from job, company, resume
+        formData.append("job_title", jobTitle);
+        formData.append("job_description", jobDescription);
+        formData.append("company_name", companyName);
+        formData.append("company_description", companyDescription);
+
+        if (resume) {
+            formData.append('resume', resume);  // add the file to FormData
+        }
+
         try {
-
-            const response = await api.post(`/api/create-interview/${id}/`, {
-                job_title:jobTitle, 
-                job_description:jobDescription,
-
-                company_name: comapnyName,
-                company_description: companyDescription,
-            
-            });  // pass in form data
+            const response = await api.post(`/api/create-interview/${id}/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             console.log(response.data);
         } catch (error) {
             console.error('Error creating interview:', error);
