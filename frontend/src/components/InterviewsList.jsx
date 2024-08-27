@@ -3,27 +3,22 @@ import { Link } from 'react-router-dom';
 import "../styles/InterviewsList.css";
 
 
-function InterviewsList({ interviews }) {
+function InterviewList({ interviews }) {
     return (
-        <div className="interviews-list-container">
-            {interviews.map((interview, index) => (
+        <div className="interview-list">
+            {interviews.map((interview) => (
                 <Link to={`/view-interview/${interview.id}`} key={interview.id} className="interview-card-link">
-                    <div key={index} className="interview-card">
-
-                        <div className="interview-card-title">
-                            {interview.job_title} @ {interview.company_name}
-                        </div>
-
-                        <div className="interview-card-company">
-                            {interview.company_name}
-                        </div>
-
+                    <div className="interview-card">
+                        <h3 className="interview-title">{interview.job_title}</h3>
+                        <p className="company-name">{interview.company_name}</p>
+                        <p className={`interview-status ${interview.status.toLowerCase()}`}>
+                            {interview.status === 'incomplete' ? 'Incomplete' : 'Complete'}
+                        </p>
                     </div>
                 </Link>
-                
             ))}
         </div>
     );
 }
 
-export default InterviewsList;
+export default InterviewList;

@@ -31,4 +31,4 @@ class JobSerializer(serializers.ModelSerializer):
 class InterviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interview
-        fields = ['id', "job_title", "job_description", "company_name", "company_description"] 
+        fields = ['id', "job_title", "job_description", "company_name", "company_description", "status"] 

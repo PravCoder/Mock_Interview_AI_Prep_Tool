@@ -31,6 +31,8 @@ class Interview(models.Model):
 
    resume_text = models.CharField(max_length=10000, null=True) 
 
+   status = models.CharField(max_length=20, null=True, default="incomplete")  # complete or incomplete
+
    # documents = 
 
 

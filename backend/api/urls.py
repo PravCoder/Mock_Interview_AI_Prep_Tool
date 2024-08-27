@@ -12,6 +12,8 @@ urlpatterns = [
 
     path("get-interviews-in-job/<str:pk>/", views.get_interviews_in_job, name="get-interviews-in-job"),
 
+    path("get-interview/<str:pk>/", views.get_interview, name="get_interview"),
+
 
     # TESTING PURPOSES ONLY BELOW
     path("get-foo/", views.get_foo, name="get-foo"),

@@ -6,6 +6,17 @@ import { FaPlus } from 'react-icons/fa';
 
 function ViewInterviewPage() {
     const { id } = useParams();
+    const [interview, setInterview] = useState({});
+
+    useEffect(() => {
+      api.get(`/api/get-interview/${id}/`)
+          .then(response => {
+              setInterview(response.data.interview);
+          })
+          .catch(error => {
+              console.log(error);
+          });
+    }, []);
 
 
     return (
