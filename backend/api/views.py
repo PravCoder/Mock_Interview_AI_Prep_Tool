@@ -112,6 +112,16 @@ def get_interview(request, pk):
 
     return Response({"interview":interview_serializer.data})
 
+@api_view(["POST"])
+def start_interview(request, pk):  
+    user = request.user
+    interview = Interview.objects.get(id=int(pk))
+    interview.status = "in progress"
+    interview.save()
+    interview_serializer = InterviewSerializer(interview)
+
+    return Response({"interview":interview_serializer.data})
+
 
 
 # TESTING PURPOSES ONLY BELOW

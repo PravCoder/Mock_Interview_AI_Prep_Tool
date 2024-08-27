@@ -1,0 +1,41 @@
+/* Container for the entire page */
+.start-interview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100vh;
+    padding: 0 20px;
+}
+
+/* Message styling */
+.start-interview-message {
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+.start-interview-message h2 {
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Button styling */
+.start-interview-button {
+    align-self: flex-end;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #4b3bf1;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-interview-button:hover {
+    background-color: #372dd8;
+}
+
+.start-interview-button:active {
+    background-color: #2e26b2;
+}
