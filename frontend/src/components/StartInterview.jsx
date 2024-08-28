@@ -8,10 +8,12 @@ function StartInterview({ interview }) {
     // const history = useHistory();
     const [inter, setInter] = useState(interview);
 
+    // when start-interview button is clicked send request to update its status
     const startInterview = async () => {
         try {
             const response = await api.post(`/api/start-interview/${interview.id}/`);
             setInter(response.data.interview);
+            window.location.reload();
         } catch (error) {
             console.error('Error starting interview:', error);
         }

@@ -12,7 +12,9 @@ function InterviewList({ interviews }) {
                         <h3 className="interview-title">{interview.job_title}</h3>
                         <p className="company-name">{interview.company_name}</p>
                         <p className={`interview-status ${interview.status.toLowerCase()}`}>
-                            {interview.status === 'incomplete' ? 'Incomplete' : 'Complete'}
+                            {interview.status === 'incomplete' ? 'Incomplete' :
+                             interview.status === 'in progress' ? 'In Progress' :
+                             'Complete'}
                         </p>
                     </div>
                 </Link>
