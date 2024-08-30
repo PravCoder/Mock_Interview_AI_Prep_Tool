@@ -6,7 +6,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import User, Job, Interview
 from rest_framework.response import Response
 from django.http import HttpResponse
-
+# OPENAI STUFF
+from dotenv import load_dotenv, find_dotenv
+import os
+load_dotenv()
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+import json
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -116,26 +122,64 @@ def get_interview(request, pk):
 def start_interview(request, pk):  
     user = request.user
     interview = Interview.objects.get(id=int(pk))
-    interview.status = "in progress"
+    interview.status = "in_progress"
     interview.save()
     interview_serializer = InterviewSerializer(interview)
 
     return Response({"interview":interview_serializer.data})
 
+def get_interview_description(interview_id):
+    try:
+        interview = Interview.objects.get(id=interview_id)
+        return (
+            f"Job description: {interview.job_description}\n"
+            f"Company information: {interview.company_name}\n"
+            f"{interview.company_description}\n"
+            f"Resume of candidate: {interview.resume_text}"
+        )
+    except Interview.DoesNotExist:
+        raise ValueError(f"Interview with id {interview_id} does not exist.")
 
 
+def get_interview_description(interview_id):
+    try:
+        interview = Interview.objects.get(id=interview_id)
+        return (
+            f"Job description: {interview.job_description}\n"
+            f"Company information: {interview.company_name}\n"
+            f"{interview.company_description}\n"
+            f"Resume of candidate: {interview.resume_text}"
+        )
+    except Interview.DoesNotExist:
+        raise ValueError(f"Interview with id {interview_id} does not exist.")
+    
 # TESTING PURPOSES ONLY BELOW
 foo_db = ["foo1","foo1","foo1","foo1","foo1" ]
-@api_view(["GET"]) # his view function will respond to HTTP GET requests. When a GET request is made to the corresponding URL (e.g., /api/hello-world/), this function will be invoked
+@api_view(["GET"]) 
 def get_foo(request):
-    print(f"USER: {request.user}")
-    for user in User.objects.all():
-        print(user)
+    natural_language_description = get_interview_description(5)
+    # LANGCHAIN TESTING
+    llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    template = """You are conducting a Mock Job Interview, given job description, company information, resume information.
+    Input: {input}
 
-    user_serializer = UserSerializer(request.user)
-    return Response({'foo_list': foo_db, "user":user_serializer.data["email"]})
+    Output: Give me 10 questions that a interviewer might ask in a interview.
+    """
 
-@api_view(["POST"]) # his view function will respond to HTTP GET requests. When a GET request is made to the corresponding URL (e.g., /api/hello-world/), this function will be invoked
+    prompt = PromptTemplate.from_template(template)
+
+    formatted_prompt = prompt.format(input=natural_language_description)
+    response = llm.invoke(formatted_prompt)
+    content = response.content
+    metadata = response.response_metadata # usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
+    usage_metadata = response.usage_metadata
+
+    print(content)
+    print(f"{usage_metadata=}")
+
+    return Response({})
+
+@api_view(["POST"]) 
 def create_foo(request):
     print("HELLOasdasdasdasdasdasdasdasdas")
     content = request.data["content"]
