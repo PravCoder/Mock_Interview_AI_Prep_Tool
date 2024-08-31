@@ -35,5 +35,11 @@ class Interview(models.Model):
 
    # documents = 
 
+   questions = models.ManyToManyField("Question", related_name="questions", blank=True)
+
+class Question(models.Model):
+    prompt = models.CharField(max_length=100, null=True) 
+    user_answer = models.CharField(max_length=10000, null=True) 
+    feedback = models.CharField(max_length=10000, null=True) 
 
 

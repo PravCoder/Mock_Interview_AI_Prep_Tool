@@ -140,18 +140,6 @@ def get_interview_description(interview_id):
     except Interview.DoesNotExist:
         raise ValueError(f"Interview with id {interview_id} does not exist.")
 
-
-def get_interview_description(interview_id):
-    try:
-        interview = Interview.objects.get(id=interview_id)
-        return (
-            f"Job description: {interview.job_description}\n"
-            f"Company information: {interview.company_name}\n"
-            f"{interview.company_description}\n"
-            f"Resume of candidate: {interview.resume_text}"
-        )
-    except Interview.DoesNotExist:
-        raise ValueError(f"Interview with id {interview_id} does not exist.")
     
 # TESTING PURPOSES ONLY BELOW
 foo_db = ["foo1","foo1","foo1","foo1","foo1" ]
