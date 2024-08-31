@@ -3,12 +3,12 @@ from rest_framework import generics
 from .serializers import UserSerializer, JobSerializer, InterviewSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import User, Job, Interview
+from .models import User, Job, Interview, Question
 from rest_framework.response import Response
 from django.http import HttpResponse
 # OPENAI STUFF
 from dotenv import load_dotenv, find_dotenv
-import os
+import os, re
 load_dotenv()
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
@@ -92,7 +92,52 @@ def create_interview(request, pk):  # id of job specific to user
     job.interviews.add(new_interview)
     job.save()
 
+    # GET QUESTIONS FROM OPENAI MODEL
+    natural_language_description = get_interview_description(new_interview.id)  # get the job description, company information, and resume text associated with interview in one string
     
+    llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # create the model using api-key
+
+    template = """You are conducting a Mock Job Interview, given job description, company information, resume information.
+    Input: {input}
+
+    Output: Give me 10 questions that a interviewer might ask in a interview, where each question is on a newline sperate by 1). 
+    """  # create template for prompt
+
+    prompt = PromptTemplate.from_template(template) # create prompt object from template-string
+
+    formatted_prompt = prompt.format(input=natural_language_description) # format the prompt
+    response = llm.invoke(formatted_prompt)                              # model.invoke(prompt) gives the models response
+    content = response.content                                           # get the content of the response       
+    metadata = response.response_metadata                                # get the usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
+    usage_metadata = response.usage_metadata                             # get usage data of prompt and answer
+
+    print(content)
+    print(f"{usage_metadata=}")
+
+    # CREATE QUESTION OBJECTS
+    """
+    1) Can you walk me through your experience as a UI/UX Designer at Quest Consultants?
+    2) How did you approach the development of the Stock Price Prediction Service project?
+    3) What challenges did you face while working on the Cricket Career Sports Management Site project?
+    4) Can you explain the process of developing the Neural Network Library From Scratch project?
+    5) How did you utilize machine learning in your research on predicting academic performance?
+    6) What programming languages and tools do you feel most comfortable working with?
+    7) How do you stay updated on the latest trends and technologies in software engineering and data science?
+    8) Can you discuss a time when you had to work on a project with a tight deadline? How did you handle it?
+    9) How do you ensure the usability and user-friendliness of the products you develop?
+    10) How do you approach problem-solving and decision-making in a team setting?
+    usage_metadata={'input_tokens': 820, 'output_tokens': 182, 'total_tokens': 1002}
+    """
+    questions_texts = re.split(r'\d+\)\s', content)
+    questions_texts = [q for q in questions_texts if q]     # questions_texts=['Can you walk me through your experience as a UI/UX Designer at Quest Consultants?\n', ....]
+    print(f"{questions_texts=}")
+    
+    for i, prompt in enumerate(questions_texts):
+        question_obj = Question(prompt=prompt, timestep=i)
+        question_obj.save()
+        new_interview.questions.add(question_obj)
+        new_interview.save()
+
     return Response({"message":"succesfully created interview"})
 
 
