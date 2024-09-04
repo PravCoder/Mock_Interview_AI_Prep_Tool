@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Job, Interview
+from .models import User, Job, Interview, Question
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -29,6 +29,12 @@ class JobSerializer(serializers.ModelSerializer):
         fields = ['id', "title"] 
 
 class InterviewSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Interview
-        fields = ['id', "job_title", "job_description", "company_name", "company_description", "status"] 
+        fields = ['id', "job_title", "job_description", "company_name", "company_description", "status", "resume_text"] 
+    
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['id', "prompt", "user_answer", "feedback", "timestep"] 

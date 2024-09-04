@@ -11,6 +11,8 @@ urlpatterns = [
     path("create-interview/<str:pk>/", views.create_interview, name="create_interview"),
 
     path("get-interviews-in-job/<str:pk>/", views.get_interviews_in_job, name="get-interviews-in-job"),
+    
+    path("get-interview-questions/<str:pk>/", views.get_interview_questions, name="get-interview-questions"),
 
     path("get-interview/<str:pk>/", views.get_interview, name="get_interview"),
     path("start-interview/<str:pk>/", views.start_interview, name="start_interview"),

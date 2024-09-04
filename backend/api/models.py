@@ -41,5 +41,5 @@ class Question(models.Model):
     prompt = models.CharField(max_length=100, null=True) 
     user_answer = models.CharField(max_length=10000, null=True) 
     feedback = models.CharField(max_length=10000, null=True) 
-    timestep = models.IntegerField(default=1,  null=True,blank=True)
-
+    timestep = models.IntegerField(default=1,  null=True,blank=True) # the order in which the questions have to be asked
+ 

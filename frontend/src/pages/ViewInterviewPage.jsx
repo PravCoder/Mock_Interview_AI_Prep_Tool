@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import api from "../api";
 import { FaPlus } from 'react-icons/fa';
 import StartInterview from "../components/StartInterview";
+import TakeInterview from "../components/TakeInterview";
 
 
 function ViewInterviewPage() {
@@ -24,7 +25,7 @@ function ViewInterviewPage() {
       };
 
       fetchInterview();
-  }, [id]);
+    }, [id]);
 
   if (loading) {
       return <div>Loading...</div>;
@@ -40,13 +41,7 @@ function ViewInterviewPage() {
           {interview.status === 'incomplete' ? (
               <StartInterview interview={interview} />
           ) : (
-              <div>
-                  <h2>Interview Details</h2>
-                  {/* Render other interview details here */}
-                  <p>Job Title: {interview.job_title}</p>
-                  <p>Company Name: {interview.company_name}</p>
-                  {/* Add more details as needed */}
-              </div>
+              <TakeInterview interview={interview}/>
           )}
       </div>
   );
