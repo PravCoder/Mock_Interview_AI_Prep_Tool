@@ -151,6 +151,14 @@ def save_question_answer(request):
 
     return Response({})
 
+@api_view(["POST"])
+def end_interview(request, pk):
+    interview = Interview.objects.get(id=int(pk))
+    interview.status = "complete"
+    interview.save()
+
+    return Response({})
+
 @api_view(["GET"])
 def get_interviews_in_job(request, pk):    
     user = request.user

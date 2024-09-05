@@ -7,7 +7,7 @@ function TakeInterview({ interview }) {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState("");  // Current answer in the textarea
-    const [answers, setAnswers] = useState({}); // To store answers for each question
+    const [answers, setAnswers] = useState({}); // to store answers for each question, for immedate update of saved answers. 
 
     useEffect(() => {
         api.get(`/api/get-interview-questions/${interview.id}/`)
@@ -50,20 +50,22 @@ function TakeInterview({ interview }) {
         setUserAnswer(e.target.value);
     };
 
-    const handleQuestionSubmit = async (questionId) => {
+
+
+    const handleEndInterview = async () => {
         try {
-            await api.post("/api/save-question-answer/", {
-                question_id: questionId,
-                answer: userAnswer
+            // Making a POST request to end the interview
+            const response = await api.post(`/api/end-interview/${interview.id}/`, {
+                // Pass any data if needed
             });
-            // Update the answers state
-            setAnswers(prevAnswers => ({
-                ...prevAnswers,
-                [questionId]: userAnswer
-            }));
-            console.log("Answer submitted for question ID:", questionId);
+
+            // Handle success (e.g., redirect to a summary page or show a message)
+            console.log("Interview ended successfully:", response.data);
+
+            // Optional: redirect or show success message
         } catch (error) {
-            alert("Error submitting answer: " + error);
+            console.error("Error ending the interview:", error);
+            alert("There was an error ending the interview. Please try again.");
         }
     };
 
@@ -109,8 +111,15 @@ function TakeInterview({ interview }) {
                     <p>Loading answer box...</p>
                 )}
                 <button className="record-button">Record Answer</button>
+                <button className="end-interview-button" onClick={handleEndInterview}>
+                    End Interview
+                </button>
             </div>
+
+            
+            
         </div>
+        
     );
 }
 

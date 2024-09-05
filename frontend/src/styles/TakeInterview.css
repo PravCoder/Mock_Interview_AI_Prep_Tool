@@ -98,3 +98,19 @@
 .record-button:hover {
     background-color: #218838;
 }
+
+
+
+.end-interview-button {
+    background-color: #6a0dad; /* Purple */
+    color: #fff;
+
+    padding: 10px 20px;
+    margin-left: 350px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    
+}

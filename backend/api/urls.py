@@ -19,6 +19,9 @@ urlpatterns = [
 
     path("save-question-answer/", views.save_question_answer, name="save-question-answer"),
 
+    path("end-interview/<str:pk>/", views.end_interview, name="end-interview"),
+
+
 
     # TESTING PURPOSES ONLY BELOW
     path("get-foo/", views.get_foo, name="get-foo"),
