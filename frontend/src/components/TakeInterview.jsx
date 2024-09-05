@@ -6,7 +6,8 @@ import '../styles/TakeInterview.css'; // Import the CSS file
 function TakeInterview({ interview }) {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [userAnswer, setUserAnswer] = useState("");  // users answer to cur-question
+    const [userAnswer, setUserAnswer] = useState("");  // Current answer in the textarea
+    const [answers, setAnswers] = useState({}); // To store answers for each question
 
     useEffect(() => {
         api.get(`/api/get-interview-questions/${interview.id}/`)
@@ -22,40 +23,47 @@ function TakeInterview({ interview }) {
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setUserAnswer("");  // reset on change questionbecause we don't eant previous question answer to carry over to next question
         }
     };
 
     const handleBack = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
+            setUserAnswer("");  // reset on change questionbecause we don't eant previous question answer to carry over to next question
         }
     };
 
-    const handleAnswerChange = (e) => {  // sets the answer to cur question
+    const handleAnswerChange = (e) => {
         setUserAnswer(e.target.value);
     };
 
     const handleQuestionSubmit = async (questionId) => {
         try {
-            // make a post request to submit the answer to that question passing in question-id and user-answer to question
-            const res = await api.post("/api/save-question-answer/", {
+            await api.post("/api/save-question-answer/", {
                 question_id: questionId,
                 answer: userAnswer
             });
-
+            // Update the answers state
+            setAnswers(prevAnswers => ({
+                ...prevAnswers,
+                [questionId]: userAnswer
+            }));
             console.log("Answer submitted for question ID:", questionId);
         } catch (error) {
             alert("Error submitting answer: " + error);
         }
     };
 
+    const currentQuestion = questions[currentQuestionIndex];
+
     return (
         <div className="interview-container">
             <div className="question-box">
-                {questions.length > 0 ? (
+                {currentQuestion ? (
                     <>
                         <h2>Question #{currentQuestionIndex + 1}</h2>
-                        <p>{questions[currentQuestionIndex].prompt}</p>
+                        <p>{currentQuestion.prompt}</p>
                     </>
                 ) : (
                     <p>Loading questions...</p>
@@ -70,8 +78,18 @@ function TakeInterview({ interview }) {
                 </div>
             </div>
             <div className="answer-box">
-                <textarea placeholder="Type your answer here..." value={userAnswer} onChange={handleAnswerChange} />  
-                <button className="submit-typed-button" onClick={() => handleQuestionSubmit(questions[currentQuestionIndex].id)} > Submit Typed Answer</button>
+                {currentQuestion ? (
+                    <>
+                        <textarea placeholder="Type your answer here..."
+                            value={userAnswer}
+                            onChange={handleAnswerChange}
+                        />
+                        <button className="submit-typed-button" onClick={() => handleQuestionSubmit(currentQuestion.id)} >Submit Typed Answer</button>
+                        <p>Saved Answer: {answers[currentQuestion.id] || "No answer submitted yet"}</p>
+                    </>
+                ) : (
+                    <p>Loading answer box...</p>
+                )}
                 <button className="record-button">Record Answer</button>
             </div>
         </div>
