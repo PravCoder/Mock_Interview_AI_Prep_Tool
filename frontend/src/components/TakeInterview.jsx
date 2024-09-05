@@ -6,6 +6,7 @@ import '../styles/TakeInterview.css'; // Import the CSS file
 function TakeInterview({ interview }) {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [userAnswer, setUserAnswer] = useState("");  // users answer to cur-question
 
     useEffect(() => {
         api.get(`/api/get-interview-questions/${interview.id}/`)
@@ -30,6 +31,24 @@ function TakeInterview({ interview }) {
         }
     };
 
+    const handleAnswerChange = (e) => {  // sets the answer to cur question
+        setUserAnswer(e.target.value);
+    };
+
+    const handleQuestionSubmit = async (questionId) => {
+        try {
+            // make a post request to submit the answer to that question passing in question-id and user-answer to question
+            const res = await api.post("/api/save-question-answer/", {
+                question_id: questionId,
+                answer: userAnswer
+            });
+
+            console.log("Answer submitted for question ID:", questionId);
+        } catch (error) {
+            alert("Error submitting answer: " + error);
+        }
+    };
+
     return (
         <div className="interview-container">
             <div className="question-box">
@@ -51,7 +70,8 @@ function TakeInterview({ interview }) {
                 </div>
             </div>
             <div className="answer-box">
-                <textarea placeholder="Type your answer here..." />
+                <textarea placeholder="Type your answer here..." value={userAnswer} onChange={handleAnswerChange} />  
+                <button className="submit-typed-button" onClick={() => handleQuestionSubmit(questions[currentQuestionIndex].id)} > Submit Typed Answer</button>
                 <button className="record-button">Record Answer</button>
             </div>
         </div>

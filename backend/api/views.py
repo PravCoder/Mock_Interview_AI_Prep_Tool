@@ -138,6 +138,18 @@ def get_interview_questions(request, pk):
 
     return Response({"questions":serialized_questions})
 
+@api_view(["POST"])
+def save_question_answer(request):
+    print(f"{request.data}")
+
+    question_id = request.data["question_id"]
+    user_answer = request.data["answer"]
+
+    question = Question.objects.get(id=int(question_id))
+    question.user_answer = user_answer
+    question.save()
+
+    return Response({})
 
 @api_view(["GET"])
 def get_interviews_in_job(request, pk):    
