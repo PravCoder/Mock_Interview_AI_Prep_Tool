@@ -14,23 +14,35 @@ function TakeInterview({ interview }) {
             .then(response => {
                 setQuestions(response.data.questions);
                 console.log("questions: ", response.data.questions);
+                // Set initial userAnswer from the current question's user_answer
+                if (response.data.questions.length > 0) {
+                    const initialQuestion = response.data.questions[currentQuestionIndex];
+                    // setUserAnswer(initialQuestion.user_answer || "");
+                    // when we get the questions set the answers to the questions.answers if any of them have answers to display saved answers: ..
+                    setAnswers(
+                        response.data.questions.reduce((acc, question) => {
+                            acc[question.id] = question.user_answer || "";
+                            return acc;
+                        }, {})
+                    );
+                }
             })
             .catch(error => {
                 console.log(error);
             });
-    }, [interview.id]);
+    }, [interview.id, currentQuestionIndex]);
 
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setUserAnswer("");  // reset on change questionbecause we don't eant previous question answer to carry over to next question
+            setUserAnswer("");
         }
     };
 
     const handleBack = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
-            setUserAnswer("");  // reset on change questionbecause we don't eant previous question answer to carry over to next question
+            setUserAnswer("");
         }
     };
 
@@ -80,11 +92,17 @@ function TakeInterview({ interview }) {
             <div className="answer-box">
                 {currentQuestion ? (
                     <>
-                        <textarea placeholder="Type your answer here..."
+                        <textarea
+                            placeholder="Type your answer here..."
                             value={userAnswer}
                             onChange={handleAnswerChange}
                         />
-                        <button className="submit-typed-button" onClick={() => handleQuestionSubmit(currentQuestion.id)} >Submit Typed Answer</button>
+                        <button
+                            className="submit-typed-button"
+                            onClick={() => handleQuestionSubmit(currentQuestion.id)}
+                        >
+                            Submit Typed Answer
+                        </button>
                         <p>Saved Answer: {answers[currentQuestion.id] || "No answer submitted yet"}</p>
                     </>
                 ) : (
