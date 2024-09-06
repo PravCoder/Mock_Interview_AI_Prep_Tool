@@ -50,6 +50,25 @@ function TakeInterview({ interview }) {
         setUserAnswer(e.target.value);
     };
 
+    const handleQuestionSubmit = async (questionId) => {
+        try {
+            // make a post request to submit the answer to that question passing in question-id and user-answer to question
+            const res =  await api.post("/api/save-question-answer/", {
+                question_id: questionId,
+                answer: userAnswer
+            });
+
+            // Update the answers state
+            setAnswers(prevAnswers => ({
+                ...prevAnswers,
+                [questionId]: userAnswer
+            }));
+            console.log("Answer submitted for question ID:", questionId);
+        } catch (error) {
+            alert("Error submitting answer: " + error);
+        }
+    };
+
 
 
     const handleEndInterview = async () => {
