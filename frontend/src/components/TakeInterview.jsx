@@ -32,6 +32,14 @@ function TakeInterview({ interview }) {
             });
     }, [interview.id, currentQuestionIndex]);
 
+    useEffect(() => {
+        window.speechSynthesis.cancel();
+        // Convert the current question text to speech whenever the current question changes
+        if (questions.length > 0) {
+            speakQuestion(questions[currentQuestionIndex].prompt);
+        }
+    }, [currentQuestionIndex, questions]);
+
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -70,7 +78,6 @@ function TakeInterview({ interview }) {
     };
 
 
-
     const handleEndInterview = async () => {
         try {
             // Making a POST request to end the interview
@@ -86,6 +93,30 @@ function TakeInterview({ interview }) {
             console.error("Error ending the interview:", error);
             alert("There was an error ending the interview. Please try again.");
         }
+    };
+
+    const voices = window.speechSynthesis.getVoices();
+        voices.forEach((voice, index) => {
+            console.log(`${index}: ${voice.name} (${voice.lang})`);
+    });
+
+    const speakQuestion = (text) => {
+        
+        window.speechSynthesis.cancel();  // Cancel ongoing speech
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Get the available voices
+        const voices = window.speechSynthesis.getVoices();
+
+        // Select a voice by name or index (you can choose based on the list of available voices)
+        const selectedVoice = voices.find(voice => voice.name === 'Grandpa (English (United States))'); // Example voice
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // Speak the question with the selected voice
+        window.speechSynthesis.speak(utterance);
     };
 
     const currentQuestion = questions[currentQuestionIndex];
