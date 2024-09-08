@@ -120,7 +120,7 @@ def create_interview(request, pk):  # id of job specific to user
     print(f"{questions_texts=}")
     
     for i, prompt in enumerate(questions_texts):  # iterate every question text and creaste question object and add question object to newly created interview
-        question_obj = Question(prompt=prompt, timestep=i)  
+        question_obj = Question(prompt=prompt, timestep=i+1)  
         question_obj.save()
         new_interview.questions.add(question_obj)
         new_interview.save()
@@ -135,8 +135,41 @@ def end_interview(request, pk):
     interview.status = "complete"
     interview.save()
 
-    return Response({})
+    # GET FEEDBACK HOW TO IMPROVE FOR EACH QUESTION USERS ANSWER
+    question_answers_description = get_interview_questions_answers(interview.id)
+    print(f"{question_answers_description=}")
+    llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # create the model using api-key
 
+    template = """These are questions asked in a mock job interview and the candidates answers. You are also given the job dsecription, comapny informaiton, and resume information.  
+    Input: {input}
+
+    Output: Based on the candiates answer to each question give how the candiate can improve in each question, where each feedback to a question is on a newline sperate by 1). 
+    """ 
+
+    prompt = PromptTemplate.from_template(template)
+    formatted_prompt = prompt.format(input=question_answers_description) # format the prompt
+    response = llm.invoke(formatted_prompt)                              # model.invoke(prompt) gives the models response
+    content = response.content                                           # get the content of the response       
+    metadata = response.response_metadata                                # get the usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
+    usage_metadata = response.usage_metadata                             # get usage data of prompt and answer
+
+    print(f"\n{content=}")
+    print(f"{usage_metadata=}")
+
+    # SAVE FEEDBACK OF EACH QUESTION
+    feedback_list = re.findall(r'\d+\) [^\n]+', content)
+    feedback_list = [feedback.strip() for feedback in feedback_list if feedback.strip()]
+    print(f"\n{feedback_list=}")
+
+    for feedback_text in feedback_list:
+        feedback_ts = int(feedback_text[0])
+        for question in interview.questions.all():
+            if question.timestep == feedback_ts:
+                question.feedback = feedback_text
+                question.save()
+
+
+    return Response({})
 
 
 @api_view(["GET"])
@@ -207,7 +240,15 @@ def get_interview_description(interview_id):
         )
     except Interview.DoesNotExist:
         raise ValueError(f"Interview with id {interview_id} does not exist.")
+    
+def get_interview_questions_answers(interview_id):
+    interview = Interview.objects.get(id=interview_id)
 
+    description = ""
+    for question in list(interview.questions.all()):
+        description += str(question.timestep)+ ") Question: "+str(question.prompt).strip() + ", Answer: " + str(question.user_answer) + "\n"
+
+    return description
     
 # TESTING PURPOSES ONLY BELOW
 foo_db = ["foo1","foo1","foo1","foo1","foo1" ]
