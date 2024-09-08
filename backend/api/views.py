@@ -127,6 +127,18 @@ def create_interview(request, pk):  # id of job specific to user
 
     return Response({"message":"succesfully created interview"})
 
+
+
+@api_view(["POST"])
+def end_interview(request, pk):
+    interview = Interview.objects.get(id=int(pk))
+    interview.status = "complete"
+    interview.save()
+
+    return Response({})
+
+
+
 @api_view(["GET"])
 def get_interview_questions(request, pk):  
     interview = Interview.objects.get(id=int(pk))
@@ -151,13 +163,6 @@ def save_question_answer(request):
 
     return Response({})
 
-@api_view(["POST"])
-def end_interview(request, pk):
-    interview = Interview.objects.get(id=int(pk))
-    interview.status = "complete"
-    interview.save()
-
-    return Response({})
 
 @api_view(["GET"])
 def get_interviews_in_job(request, pk):    

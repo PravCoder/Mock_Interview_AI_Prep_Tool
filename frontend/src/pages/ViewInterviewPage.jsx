@@ -5,6 +5,7 @@ import api from "../api";
 import { FaPlus } from 'react-icons/fa';
 import StartInterview from "../components/StartInterview";
 import TakeInterview from "../components/TakeInterview";
+import ReviewInterview from "../components/ReviewInterview";
 
 
 function ViewInterviewPage() {
@@ -38,11 +39,11 @@ function ViewInterviewPage() {
   return (
       <div>
           {/* if interview is incomplete display start-interview-comp else start the interview */}
-          {interview.status === 'incomplete' ? (
-              <StartInterview interview={interview} />
-          ) : (
-              <TakeInterview interview={interview}/>
-          )}
+          {/* if interview is in_progress display take-interview */}
+          {/* if interview is in_progress display review-interview */}
+          {interview.status === "incomplete" && <StartInterview  interview={interview} />}
+          {interview.status === "in_progress" && <TakeInterview interview={interview} />}
+          {interview.status === "complete" && <ReviewInterview  interview={interview} />}
       </div>
   );
 }
