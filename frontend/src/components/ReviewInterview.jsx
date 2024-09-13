@@ -104,7 +104,7 @@ function ReviewInterview({ interview }) {
                 ) : (
                     <p>Loading answer box...</p>
                 )}
-                <button className="record-button">Record Answer</button>
+                {/* <button className="record-button">Record Answer</button> */}
 
             </div>
 

@@ -68,7 +68,7 @@ def get_job_one(request, pk):
 
 
 @api_view(["POST"])
-def create_interview(request, pk):  # id of job specific to user
+def create_interview(request, pk):  # when interview is created then the questions are created.s
     user = request.user 
 
     job = Job.objects.get(id=int(pk)) # get the type of job-category this interview is in

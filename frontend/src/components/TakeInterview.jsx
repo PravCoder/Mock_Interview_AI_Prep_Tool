@@ -3,11 +3,18 @@ import React, { useState, useEffect } from 'react';
 import api from "../api";
 import '../styles/TakeInterview.css'; // Import the CSS file
 
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
 function TakeInterview({ interview }) {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState("");  // Current answer in the textarea
     const [answers, setAnswers] = useState({}); // to store answers for each question, for immedate update of saved answers. 
+
+    const [isRecording, setIsRecording] = useState(false);
+
 
     useEffect(() => {
         api.get(`/api/get-interview-questions/${interview.id}/`)
@@ -95,9 +102,10 @@ function TakeInterview({ interview }) {
         }
     };
 
+
     const voices = window.speechSynthesis.getVoices();
         voices.forEach((voice, index) => {
-            console.log(`${index}: ${voice.name} (${voice.lang})`);
+            // console.log(`${index}: ${voice.name} (${voice.lang})`);
     });
 
     const speakQuestion = (text) => {
@@ -117,6 +125,46 @@ function TakeInterview({ interview }) {
 
         // Speak the question with the selected voice
         window.speechSynthesis.speak(utterance);
+    };
+
+
+    const toggleRecording = () => {
+        if (isRecording) {
+            recognition.stop(); // Stop listening
+        } else {
+            recognition.start(); // Start listening
+        }
+        setIsRecording(!isRecording); // Toggle recording state
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setUserAnswer(transcript); // Set the recorded text as the answer
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+    };
+
+    recognition.onend = () => {
+        setIsRecording(false); // Automatically stop recording when SpeechRecognition ends
+    };
+
+    const startListening = () => {
+        recognition.start();
+        setIsListening(true);
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log("Transcript: ", transcript);
+            setUserAnswer(transcript);  // Set the transcribed speech as the user's answer
+            setIsListening(false);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Error occurred in recognition: ", event.error);
+            setIsListening(false);
+        };
     };
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -160,7 +208,20 @@ function TakeInterview({ interview }) {
                 ) : (
                     <p>Loading answer box...</p>
                 )}
-                <button className="record-button">Record Answer</button>
+                
+
+                {/* Record Answer Button */}
+                <button
+                    className={`record-button ${isRecording ? 'recording' : ''}`}
+                    onClick={toggleRecording}
+                    style={{
+                        backgroundColor: isRecording ? 'red' : 'gray',
+                        color: 'white'
+                    }}
+                >
+                    {isRecording ? 'Stop Recording' : 'Record Answer'}
+                </button>
+
                 <button className="end-interview-button" onClick={handleEndInterview}>
                     End Interview
                 </button>
