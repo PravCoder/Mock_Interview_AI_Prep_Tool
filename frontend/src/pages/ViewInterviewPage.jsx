@@ -38,7 +38,7 @@ function ViewInterviewPage() {
 
   return (
       <div>
-          {/* if interview is incomplete display start-interview-comp else start the interview */}
+          {/* if interview is incomplete they havent even started */}
           {/* if interview is in_progress display take-interview */}
           {/* if interview is in_progress display review-interview */}
           {interview.status === "incomplete" && <StartInterview  interview={interview} />}

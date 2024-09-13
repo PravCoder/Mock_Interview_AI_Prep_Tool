@@ -137,17 +137,24 @@ def end_interview(request, pk):
 
     # GET FEEDBACK HOW TO IMPROVE FOR EACH QUESTION USERS ANSWER
     question_answers_description = get_interview_questions_answers(interview.id)
-    print(f"{question_answers_description=}")
+    job_info, company_info, company_description, resume_text = get_interview_description_seperate(interview.id)
+    print(f"\n{question_answers_description=}")
     llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # create the model using api-key
+    
+    template = """
+    These are questions asked in a mock job interview here is the job information {job_info}. Here is the company information {company_info}. Finally here are the candidate's answers to each question.
 
-    template = """These are questions asked in a mock job interview and the candidates answers. You are also given the job dsecription, comapny informaiton, and resume information.  
     Input: {input}
 
-    Output: Based on the candiates answer to each question give how the candiate can improve in each question, where each feedback to a question is on a newline sperate by 1). 
-    """ 
+    Output: Based on the candidate's answers to each question, job info, company info, candidates resume provide detailed honest feedback on how they can improve in each response, here are some things you should consider in your reponse Clarity (how well did they communicate thier answer, is their answer easy to follow or hard to understand), Relevance (did the answer address the question directly or did they go off topic), Structure (does the answer have a logical flow like the STAR method), does the answer demonstrate relevant expertise, does the answer provide examples. You should also provide feedback beyond just this criteria. Give one thing they did good, and then give multiple ways they can improve their answer and all the things they did bad. List feedback on separate lines with each feedback with the first question's feedback with 1) and so on
+    The feedback should be provided as follows:
+    1) Feedback for question 1
+    2) Feedback for question 2
+    3) Feedback for question 3
+    """
 
     prompt = PromptTemplate.from_template(template)
-    formatted_prompt = prompt.format(input=question_answers_description) # format the prompt
+    formatted_prompt = prompt.format(input=question_answers_description, job_info=job_info, company_info=company_info, company_description=company_description) # format the prompt
     response = llm.invoke(formatted_prompt)                              # model.invoke(prompt) gives the models response
     content = response.content                                           # get the content of the response       
     metadata = response.response_metadata                                # get the usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
@@ -162,7 +169,7 @@ def end_interview(request, pk):
     print(f"\n{feedback_list=}")
 
     for feedback_text in feedback_list:
-        feedback_ts = int(feedback_text[0])
+        feedback_ts = int(feedback_text[0:feedback_text.index(")")])
         for question in interview.questions.all():
             if question.timestep == feedback_ts:
                 question.feedback = feedback_text
@@ -240,6 +247,10 @@ def get_interview_description(interview_id):
         )
     except Interview.DoesNotExist:
         raise ValueError(f"Interview with id {interview_id} does not exist.")
+
+def get_interview_description_seperate(interview_id):
+    interview = Interview.objects.get(id=interview_id)
+    return interview.job_description, interview.company_name, interview.company_description, interview.resume_text
     
 def get_interview_questions_answers(interview_id):
     interview = Interview.objects.get(id=interview_id)
