@@ -21,6 +21,9 @@ urlpatterns = [
 
     path("end-interview/<str:pk>/", views.end_interview, name="end-interview"),
 
+    path("generate-answer/<str:pk>/", views.generate_answer, name="generate-answer"),
+
+
 
 
     # TESTING PURPOSES ONLY BELOW

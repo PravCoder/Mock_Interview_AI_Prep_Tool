@@ -1,0 +1,128 @@
+.interview-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.question-box {
+    flex: 1;
+    margin-right: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.question-box h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.question-box p {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-buttons button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.navigation-buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.navigation-buttons button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.answer-box {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.answer-box textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.record-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.submit-typed-button {
+    padding: 10px 20px;
+    margin-right: 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #285da7;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.generate-answer-button {
+    padding: 10px 20px;
+    margin-right: 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a73b;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.record-button:hover {
+    background-color: #218838;
+}
+
+
+
+.end-interview-button {
+    background-color: #6a0dad; /* Purple */
+    color: #fff;
+
+    padding: 10px 20px;
+    margin-left: 350px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    
+}

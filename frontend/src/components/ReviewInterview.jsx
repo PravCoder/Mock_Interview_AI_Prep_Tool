@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import api from "../api";
-import '../styles/TakeInterview.css'; // Import the CSS file
+import '../styles/ReviewInterview.css'; // Import the CSS file
 
 function ReviewInterview({ interview }) {
     const [questions, setQuestions] = useState([]);
@@ -58,6 +58,25 @@ function ReviewInterview({ interview }) {
         setUserAnswer(e.target.value);
     };
 
+    const handleQuestionSubmit = async (questionId) => {
+        try {
+            // make a post request to submit the answer to that question passing in question-id and user-answer to question
+            const res =  await api.post("/api/save-question-answer/", {
+                question_id: questionId,
+                answer: userAnswer
+            });
+
+            // Update the answers state
+            setAnswers(prevAnswers => ({
+                ...prevAnswers,
+                [questionId]: userAnswer
+            }));
+            console.log("Answer submitted for question ID:", questionId);
+        } catch (error) {
+            alert("Error submitting answer: " + error);
+        }
+    };
+
 
 
 
@@ -91,15 +110,18 @@ function ReviewInterview({ interview }) {
                             value={userAnswer}
                             onChange={handleAnswerChange}
                         />
-                        <button
-                            className="submit-typed-button"
-                            onClick={() => handleQuestionSubmit(currentQuestion.id)}
-                        >
+
+                        <button className="submit-typed-button" onClick={() => handleQuestionSubmit(currentQuestion.id)}>
                             Submit Typed Answer
                         </button>
-                        <p>Saved Answer: {answers[currentQuestion.id] || "No answer submitted yet"}</p>
 
-                        <p>How to Improve: {feedbacks[currentQuestion.id] || "No answer submitted yet"}</p>
+                        <button className="generate-answer-button" onClick={() => handleGenerateAnswer(currentQuestion.id)}>
+                            Generate Answer
+                        </button>
+
+                        <p><h5>Your answer:</h5> {answers[currentQuestion.id] || "No answer submitted yet"}</p>
+
+                        <p><h5>How to Improve:</h5> {feedbacks[currentQuestion.id] || "No answer submitted yet"}</p>
                     </>
                 ) : (
                     <p>Loading answer box...</p>
