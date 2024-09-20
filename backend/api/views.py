@@ -142,7 +142,7 @@ def end_interview(request, pk):
     llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # create the model using api-key
     
     template = """
-    These are questions asked in a mock job interview here is the job information {job_info}. Here is the company information {company_info}. Finally here are the candidate's answers to each question.
+    These are questions asked in a mock job interview here is the job information {job_info}. Here is the company information {company_description}. Finally here are the candidate's answers to each question.
 
     Input: {input}
 
@@ -154,7 +154,8 @@ def end_interview(request, pk):
     """
 
     prompt = PromptTemplate.from_template(template)
-    formatted_prompt = prompt.format(input=question_answers_description, job_info=job_info, company_info=company_info, company_description=company_description) # format the prompt
+    formatted_prompt = prompt.format(input=question_answers_description, job_info=job_info, company_description=company_description) # format the prompt
+    # print(f"{formatted_prompt=}")
     response = llm.invoke(formatted_prompt)                              # model.invoke(prompt) gives the models response
     content = response.content                                           # get the content of the response       
     metadata = response.response_metadata                                # get the usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
@@ -180,8 +181,27 @@ def end_interview(request, pk):
 
 @api_view(["POST"])
 def generate_answer(request, pk): # question-id
-    print(request.POST)
-    return Response({"generated_answer":"yo this is generated answer"})
+    interview = Interview.objects.get(id=int(request.data["interview_id"]))
+    question = Question.objects.get(id=int(request.data["question_id"]))
+    job_info, company_info, company_description, resume_text = get_interview_description_seperate(interview.id)
+    
+    # GENERATE ANSWER
+    llm = ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
+    template = """This is a question in a mock job interview. Here is the question {question_prompt}.
+    Also here is information about the interview such as the job information {job_info}, company information {company_description}.
+    Output: Based on the information I have gave you I want you to generate a detailed & realistic & optimal answer at least 1.5 paragraphs to the interview question. 
+    """ 
+    
+    prompt = PromptTemplate.from_template(template)
+    formatted_prompt = prompt.format(question_prompt=question.prompt, job_info=job_info, company_description=company_description) # format the prompt
+    # print(f"{formatted_prompt=}")
+    response = llm.invoke(formatted_prompt)                              # model.invoke(prompt) gives the models response
+    content = response.content                                           # get the content of the response       
+    metadata = response.response_metadata                                # get the usage_metadata={'input_tokens': 769, 'output_tokens': 313, 'total_tokens': 1082}
+    usage_metadata = response.usage_metadata                             # get usage data of prompt and answer
+
+
+    return Response({"generated_answer":content})
 
 @api_view(["GET"])
 def get_interview_questions(request, pk):  

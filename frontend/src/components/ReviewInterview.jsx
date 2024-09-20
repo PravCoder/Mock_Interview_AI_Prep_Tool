@@ -82,7 +82,7 @@ function ReviewInterview({ interview }) {
             // make a post request to generate answer can pass id in url or pass question id through payload of request.
             const res =  await api.post(`/api/generate-answer/${questionId}/`, {
                 question_id: questionId,
-                answer: userAnswer
+                interview_id: interview.id
             });
 
             setUserAnswer(res.data.generated_answer);
@@ -133,6 +133,7 @@ function ReviewInterview({ interview }) {
                         <button className="generate-answer-button" onClick={() => handleGenerateAnswer(currentQuestion.id)}>
                             Generate Answer
                         </button>
+
 
                         <h5>Your answer:</h5>
                         <p> {answers[currentQuestion.id] || "No answer submitted yet"}</p>
