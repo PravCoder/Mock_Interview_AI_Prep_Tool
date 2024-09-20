@@ -178,9 +178,10 @@ def end_interview(request, pk):
 
     return Response({})
 
-@api_view(["GET"])
+@api_view(["POST"])
 def generate_answer(request, pk): # question-id
-    return Response({"genrated_answer":"yo this is generated answer"})
+    print(request.POST)
+    return Response({"generated_answer":"yo this is generated answer"})
 
 @api_view(["GET"])
 def get_interview_questions(request, pk):  

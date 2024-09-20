@@ -77,6 +77,21 @@ function ReviewInterview({ interview }) {
         }
     };
 
+    const handleGenerateAnswer = async (questionId) => {
+        try {
+            // make a post request to generate answer can pass id in url or pass question id through payload of request.
+            const res =  await api.post(`/api/generate-answer/${questionId}/`, {
+                question_id: questionId,
+                answer: userAnswer
+            });
+
+            setUserAnswer(res.data.generated_answer);
+            console.log("Data1: ", res.data);
+        } catch (error) {
+            alert("Error submitting answer: " + error);
+        }
+    };
+
 
 
 
@@ -119,9 +134,11 @@ function ReviewInterview({ interview }) {
                             Generate Answer
                         </button>
 
-                        <p><h5>Your answer:</h5> {answers[currentQuestion.id] || "No answer submitted yet"}</p>
+                        <h5>Your answer:</h5>
+                        <p> {answers[currentQuestion.id] || "No answer submitted yet"}</p>
 
-                        <p><h5>How to Improve:</h5> {feedbacks[currentQuestion.id] || "No answer submitted yet"}</p>
+                        <h5>How to Improve:</h5>
+                        <p> {feedbacks[currentQuestion.id] || "No answer submitted yet"}</p>
                     </>
                 ) : (
                     <p>Loading answer box...</p>
