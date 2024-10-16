@@ -8,6 +8,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 
 function TakeInterview({ interview }) {
+    const [loading, setLoading] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState("");  // Current answer in the textarea
@@ -85,21 +86,21 @@ function TakeInterview({ interview }) {
     };
 
 
-    const handleEndInterview = async () => {
-        try {
-            // Making a POST request to end the interview
-            const response = await api.post(`/api/end-interview/${interview.id}/`, {
-                // Pass any data if needed
-            });
-
-            // Handle success (e.g., redirect to a summary page or show a message)
+    const handleEndInterview = () => {
+        setLoading(true);
+        // Making a POST request to end the interview, create feedback from answers/questions
+        api.post(`/api/end-interview/${interview.id}/`, {
+            // Pass any additional data if needed
+        })
+        .then((response) => {
             console.log("Interview ended successfully:", response.data);
-
-            // Optional: redirect or show success message
-        } catch (error) {
+            // Reload the page after successful POST request
+            window.location.reload();
+        })
+        .catch((error) => {
             console.error("Error ending the interview:", error);
             alert("There was an error ending the interview. Please try again.");
-        }
+        });
     };
 
 
@@ -222,9 +223,19 @@ function TakeInterview({ interview }) {
                     {isRecording ? 'Stop Recording' : 'Record Answer'}
                 </button>
 
-                <button className="end-interview-button" onClick={handleEndInterview}>
-                    End Interview
-                </button>
+                
+
+                {/* Loading when generating feedback */}
+                {loading ? (
+                <div className="loading-spinner">
+                    
+                    <p>Generating feedback based on your answers...</p>
+                </div>
+                ) : (
+                    <button className="end-interview-button" onClick={handleEndInterview}>
+                        End Interview
+                    </button>
+                )}
             </div>
 
             
