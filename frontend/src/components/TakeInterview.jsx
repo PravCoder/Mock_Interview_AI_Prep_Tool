@@ -96,6 +96,7 @@ function TakeInterview({ interview }) {
             console.log("Interview ended successfully:", response.data);
             // Reload the page after successful POST request
             window.location.reload();
+            setLoading(false);
         })
         .catch((error) => {
             console.error("Error ending the interview:", error);

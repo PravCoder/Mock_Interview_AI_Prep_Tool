@@ -4,6 +4,7 @@ import api from "../api";
 import '../styles/ReviewInterview.css'; // Import the CSS file
 
 function ReviewInterview({ interview }) {
+    const [loading, setLoading] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState("");  // Current answer in the textarea
@@ -78,17 +79,20 @@ function ReviewInterview({ interview }) {
     };
 
     const handleGenerateAnswer = async (questionId) => {
+        setLoading(true); // Start the spinner
         try {
-            // make a post request to generate answer can pass id in url or pass question id through payload of request.
-            const res =  await api.post(`/api/generate-answer/${questionId}/`, {
+            // Make a POST request to generate the answer, passing questionId and interviewId
+            const res = await api.post(`/api/generate-answer/${questionId}/`, {
                 question_id: questionId,
                 interview_id: interview.id
             });
-
+    
             setUserAnswer(res.data.generated_answer);
             console.log("Data1: ", res.data);
         } catch (error) {
             alert("Error submitting answer: " + error);
+        } finally {
+            setLoading(false); // Stop the spinner
         }
     };
 
@@ -130,9 +134,19 @@ function ReviewInterview({ interview }) {
                             Submit Typed Answer
                         </button>
 
-                        <button className="generate-answer-button" onClick={() => handleGenerateAnswer(currentQuestion.id)}>
-                            Generate Answer
-                        </button>
+                        {/* Loading when generating feedback */}
+                        {loading ? (
+                        <div className="loading-spinner">
+                            
+                            <p>GeneratinsetLoading(false); // Stop the spinnerg a answer...</p>
+                        </div>
+                        ) : (
+                            <button className="generate-answer-button" onClick={() => handleGenerateAnswer(currentQuestion.id)}>
+                                Generate Answer
+                            </button>
+                        )}
+
+                        
 
 
                         <h5>Your answer:</h5>
@@ -145,6 +159,8 @@ function ReviewInterview({ interview }) {
                     <p>Loading answer box...</p>
                 )}
                 {/* <button className="record-button">Record Answer</button> */}
+
+                
 
             </div>
 
