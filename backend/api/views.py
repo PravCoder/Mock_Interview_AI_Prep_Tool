@@ -146,11 +146,7 @@ def end_interview(request, pk):
 
     Input: {input}
 
-    Output: Based on the candidate's answers to each question, job info, company info, candidates resume provide detailed honest feedback on how they can improve in each response, here are some things you should consider in your reponse Clarity (how well did they communicate thier answer, is their answer easy to follow or hard to understand), Relevance (did the answer address the question directly or did they go off topic), Structure (does the answer have a logical flow like the STAR method), does the answer demonstrate relevant expertise, does the answer provide examples. You should also provide feedback beyond just this criteria. Give one thing they did good, and then give multiple ways they can improve their answer and all the things they did bad. For each question give at least a paragraph of feedback. List feedback on separate lines with each feedback with the first question's feedback with 1) and so on
-    The feedback should be provided as follows:
-    1) Feedback for question 1
-    2) Feedback for question 2
-    3) Feedback for question 3
+    Output: Based on the candidate's answers to each question, job info, company info, candidates resume provide detailed honest feedback on how they can improve in each response.
     """
 
     prompt = PromptTemplate.from_template(template)
